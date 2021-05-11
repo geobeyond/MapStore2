@@ -299,6 +299,20 @@ module.exports = (...args) => mapArgumentsToObject(args, ({
                     host: "dev-mapstore.geosolutionsgroup.com"
                 }
             },
+            '/oauth2': {
+                target: "https://sso.geobeyond.it",
+                secure: false,
+                headers: {
+                    host: "sso.geobeyond.it"
+                }
+            },
+            '/oidc': {
+                target: "https://sso.geobeyond.it",
+                secure: false,
+                headers: {
+                    host: "sso.geobeyond.it"
+                }
+            },
             '/docs': {
                 target: "http://localhost:8081",
                 pathRewrite: {'/docs': '/mapstore/docs'}

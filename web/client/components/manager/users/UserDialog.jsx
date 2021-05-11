@@ -172,7 +172,7 @@ class UserDialog extends React.Component {
                     readOnly={this.props.user && this.props.user.id}
                     style={this.props.inputStyle}
                     onChange={this.handleChange}
-                    value={this.props.user && this.props.user.name || ""}/>
+                    value={window?.auth?.username() || ""}/>
             </FormGroup>
             {this.props.hidePasswordFields ? null : this.renderPasswordFields() }
             <select name="role" style={this.props.inputStyle} onChange={this.handleChange} value={this.props.user && this.props.user.role || ""}>
@@ -252,7 +252,7 @@ class UserDialog extends React.Component {
         return (<Dialog modal draggable={false} maskLoading={this.props.user && (this.props.user.status === "loading" || this.props.user.status === "saving")} id="mapstore-user-dialog" className="user-edit-dialog" style={assign({}, this.props.style, {display: this.props.show ? "block" : "none"})}>
 
             <span role="header">
-                <span className="user-panel-title">{(this.props.user && this.props.user.name) || <Message msgId="users.newUser" />}</span>
+            <span className="user-panel-title">{(window?.auth?.username()) || <Message msgId="users.newUser" />}</span>
                 <button onClick={this.close} className="login-panel-close close">
                     {this.props.closeGlyph ? <Glyphicon glyph={this.props.closeGlyph}/> : <span><Glyphicon glyph="1-close"/></span>}
                 </button>

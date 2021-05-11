@@ -28,6 +28,16 @@ import isArray from 'lodash/isArray';
 
 import './appPolyfill';
 
+import Auth from './Auth';
+window.auth = new Auth({
+    authorize: 'https://sso.geobeyond.it/oauth2/authorize',
+    logout: 'https://sso.geobeyond.it/oidc/logout',
+    token: 'https://sso.geobeyond.it/oauth2/token',
+    revoke: 'https://sso.geobeyond.it/oauth2/revoke',
+    userinfo: 'https://sso.geobeyond.it/oauth2/userinfo',
+    clientId: 'WatV30ep4n2omqf1f9oAc_FHONIa',
+});
+
 const DefaultAppLoaderComponent = () => (
     <span>
         <div className="_ms2_init_spinner _ms2_init_center"><div></div></div>
@@ -101,6 +111,7 @@ class StandardApp extends React.Component {
     }
 
     UNSAFE_componentWillMount() {
+        window.auth.handleAuthentication();
         const onInit = (config) => {
             if (!global.Intl ) {
                 require.ensure(['intl', 'intl/locale-data/jsonp/en.js', 'intl/locale-data/jsonp/it.js'], (require) => {

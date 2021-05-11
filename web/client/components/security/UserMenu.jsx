@@ -85,6 +85,26 @@ class UserMenu extends React.Component {
         renderUnsavedMapChangesDialog: true
     };
 
+    componentDidMount() {
+        if (window?.auth?.isAuthenticated()) {
+            if (window.auth.hasRealmRole('ADMIN')) {
+                this.props.login('admin', 'admin');
+            } else {
+                this.props.login('user', 'user');
+            }
+        }
+        setTimeout(() => {
+            window.$("#content-tabs").css("background-color", "white");            
+            window.$(":button:not([aria-label])").attr("aria-label", "simple button");
+            window.$(":input:not([aria-label])").attr("aria-label", "simple text");
+            window.$("div[role='navigation']").removeAttr("role");
+            window.$("div[role='combobox']").removeAttr("role");
+            window.$("div[class='Select-control']")
+                .attr("role", "listbox")
+                .attr("aria-label", "listbox");
+        }, 100);         
+    }
+
     checkUnsavedChanges = () => {
         if (this.props.renderUnsavedMapChangesDialog) {
             this.props.onCheckMapChanges(this.props.onLogout);
@@ -101,7 +121,7 @@ class UserMenu extends React.Component {
     renderGuestTools = () => {
         let DropDown = this.props.nav ? NavDropdown : DropdownButton;
         return (<DropDown className={this.props.className} pullRight bsStyle={this.props.bsStyle} title={this.renderButtonText()} id="dropdown-basic-primary" {...this.props.menuProps}>
-            <MenuItem onClick={this.props.onShowLogin}><Glyphicon glyph="log-in" /><Message msgId="user.login"/></MenuItem>
+            <MenuItem onClick={() => {window.auth.login();}}><Glyphicon glyph="log-in" /><Message msgId="user.login"/></MenuItem>
         </DropDown>);
     };
 
@@ -118,7 +138,7 @@ class UserMenu extends React.Component {
             if (itemArray.length > 0) {
                 itemArray.push(<MenuItem key="divider" divider />);
             }
-            itemArray.push(<MenuItem key="logout" onClick={this.checkUnsavedChanges}><Glyphicon glyph="log-out" /> <Message msgId="user.logout"/></MenuItem>);
+            itemArray.push(<MenuItem key="logout" onClick={() => {this.props.onLogout(); window.auth.logout();}}><Glyphicon glyph="log-out" /> <Message msgId="user.logout"/></MenuItem>);
         }
         return (
             <React.Fragment>
@@ -154,11 +174,11 @@ class UserMenu extends React.Component {
 
         return this.props.renderButtonContent ?
             this.props.renderButtonContent() :
-            [<Glyphicon glyph="user" />, this.props.renderButtonText ? this.props.user && this.props.user[this.props.displayName] || "Guest" : null];
+            [<Glyphicon glyph="user" />, this.props.renderButtonText ? window?.auth?.username()  || "Guest" : null];
     };
 
     render() {
-        return this.props.user && this.props.user[this.props.displayName] ? this.renderLoggedTools() : this.renderGuestTools();
+        return window?.auth?.isAuthenticated() ? this.renderLoggedTools() : this.renderGuestTools();
     }
 }
 

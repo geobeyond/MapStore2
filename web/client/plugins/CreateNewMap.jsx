@@ -81,7 +81,7 @@ class CreateNewMap extends React.Component {
             <div className="create-new-map-container">
                 <Grid fluid={this.props.fluid} style={{marginBottom: "30px", padding: 0, display}}>
                     <Col {...this.props.colProps} >
-                        <ButtonToolbar>
+                        <ButtonToolbar style={{ display: window?.auth?.hasRealmRole('ADMIN') ? 'true' : 'none' }}>
                             {this.props.hasContexts &&
                                 <SplitButton
                                     tooltipId="newMap"
